@@ -26,7 +26,7 @@ in this Software without prior written authorization from The Open Group.
  * Author:  Keith Packard, MIT X Consortium
  */
 
-/* $XFree86$ */
+/* $XFree86: xc/programs/xconsole/xconsole.c,v 3.32 2003/05/27 22:26:59 tsi Exp $ */
 
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>

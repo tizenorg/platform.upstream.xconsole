@@ -146,24 +146,36 @@ static XrmOptionDescRec options[] = {
 #include <os2.h>
 #endif
 
-#ifndef USE_FILE
-#include <sys/ioctl.h>
-#ifdef hpux
-#include <termios.h>
-#endif
-#ifdef SVR4
-#include <termios.h>
-#include <sys/stropts.h>		/* for I_PUSH */
-#ifdef sun
-#include <sys/strredir.h>
-#endif
+#ifdef linux
+#define USE_FILE
+#define FILE_NAME	"/dev/xconsole"
+# if defined (__GLIBC__) && ((__GLIBC__ > 2) || (__GLIBC__ == 2) && (__GLIBC_MINOR__ >= 1))
+/*
+ * Linux distribution based on glibc 2.1 and higher should use
+ * devpts. This is the fallback if open file FILE_NAME fails.
+ * <werner@suse.de>
+ */
+#  define USE_PTS 
+# endif
 #endif
 
-#if defined(TIOCCONS) || defined(SRIOCSREDIR) || defined(Lynx)
-#define USE_PTY
+#if !defined (USE_FILE) || defined (linux)
+# include <sys/ioctl.h>
+# ifdef hpux
+#  include <termios.h>
+# endif
+# if defined (SVR4) || defined (USE_PTS)
+#  include <termios.h>
+#  include <sys/stropts.h>		/* for I_PUSH */
+#  ifdef sun
+#   include <sys/strredir.h>
+#  endif
+# endif
+# if defined(TIOCCONS) || defined(SRIOCSREDIR) || defined(Lynx)
+#  define USE_PTY
 static int  tty_fd, pty_fd;
 static char ttydev[64], ptydev[64];
-#endif
+# endif
 #endif
 
 #if (defined(SVR4) && !defined(sun)) || (defined(SYSV) && defined(i386))
@@ -200,15 +212,19 @@ OpenConsole(void)
 	    /* must be owner and have read/write permission */
 #if !defined(__NetBSD__) && !defined(__OpenBSD__) && !defined(Lynx) && !defined(__UNIXOS2__)
 	    struct stat sbuf;
-
+# if !defined (linux)
 	    if (!stat("/dev/console", &sbuf) &&
 		(sbuf.st_uid == getuid()) &&
 		!access("/dev/console", R_OK|W_OK))
+# endif
 #endif
 	    {
 #ifdef USE_FILE
+# ifdef linux
+		if (!stat(FILE_NAME, &sbuf))
+# endif
 		input = fopen (FILE_NAME, "r");
-#ifdef __UNIXOS2__
+# ifdef __UNIXOS2__
 		if (input)
 		{
 		    ULONG arg = 1,arglen;
@@ -221,17 +237,18 @@ OpenConsole(void)
 			input = 0;
 		    }
 		}
+# endif
 #endif
-#endif
+		
 #ifdef USE_PTY
-		if (get_pty (&pty_fd, &tty_fd, ttydev, ptydev) == 0)
+		if (!input && get_pty (&pty_fd, &tty_fd, ttydev, ptydev) == 0)
 		{
-#ifdef TIOCCONS
+# ifdef TIOCCONS
 		    int on = 1;
 		    if (ioctl (tty_fd, TIOCCONS, (char *) &on) != -1)
 			input = fdopen (pty_fd, "r");
-#else
-#ifndef Lynx
+# else
+#  ifndef Lynx
 		    int consfd = open("/dev/console", O_RDONLY);
 		    if (consfd >= 0)
 		    {
@@ -239,7 +256,7 @@ OpenConsole(void)
 			    input = fdopen (pty_fd, "r");
 			close(consfd);
 		    }
-#else
+#  else
 		    if (newconsole(tty_fd) < 0)
 			perror("newconsole");
 		    else
@@ -247,10 +264,10 @@ OpenConsole(void)
 			input = fdopen (pty_fd, "r");
 			atexit(RestoreConsole);
 		    }
-#endif
-#endif
+#  endif
+# endif
 		}
-#endif
+#endif /* USE_PTY */
 	    }
 #ifdef USE_OSM
 	    /* Don't have to be owner of /dev/console when using /dev/osm. */
@@ -775,7 +792,7 @@ ScrollLine(Widget w)
 static int
 get_pty(int *pty, int *tty, char *ttydev, char *ptydev)
 {
-#ifdef SVR4
+#if defined (SVR4) || defined (USE_PTS)
 	if ((*pty = open ("/dev/ptmx", O_RDWR)) < 0)
 	    return 1;
 	grantpt(*pty);

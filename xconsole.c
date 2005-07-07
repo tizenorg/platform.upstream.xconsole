@@ -788,7 +788,6 @@ ScrollLine(Widget w)
  * has problems, we can re-enter this function and get another one.
  */
 
-#include    "../xterm/ptyx.h"
 static int
 get_pty(int *pty, int *tty, char *ttydev, char *ptydev)
 {

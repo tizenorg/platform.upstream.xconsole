@@ -21,8 +21,8 @@
 
 bin_PROGRAMS = xconsole
 
-xconsole_CFLAGS = $(DEP_CFLAGS)
-xconsole_LDADD = $(DEP_LIBS)
+xconsole_CFLAGS = $(XCONSOLE_CFLAGS)
+xconsole_LDADD = $(XCONSOLE_LIBS)
 
 xconsole_SOURCES =	\
         xconsole.c

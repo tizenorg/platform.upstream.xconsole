@@ -159,6 +159,10 @@ static XrmOptionDescRec options[] = {
 # endif
 #endif
 
+#if defined(_AIX)
+#  define USE_PTS
+#endif
+
 #if !defined (USE_FILE) || defined (linux)
 # include <sys/ioctl.h>
 # ifdef hpux
@@ -186,10 +190,36 @@ static char ttydev[64], ptydev[64];
 #ifdef USE_PTY
 static int get_pty(int *pty, int *tty, char *ttydev, char *ptydev);
 #endif
+
 #ifdef USE_OSM
 static FILE *osm_pipe(void);
 static int child_pid;
 #endif
+
+/* Copied from xterm/ptyx.h */
+#ifndef PTYCHAR1
+#ifdef __hpux
+#define PTYCHAR1        "zyxwvutsrqp"
+#else   /* !__hpux */
+#ifdef __UNIXOS2__
+#define PTYCHAR1        "pq"
+#else
+#define PTYCHAR1        "pqrstuvwxyzPQRSTUVWXYZ"
+#endif  /* !__UNIXOS2__ */
+#endif  /* !__hpux */
+#endif  /* !PTYCHAR1 */
+
+#ifndef PTYCHAR2
+#ifdef __hpux
+#define PTYCHAR2        "fedcba9876543210"
+#else   /* !__hpux */
+#ifdef __FreeBSD__
+#define PTYCHAR2        "0123456789abcdefghijklmnopqrstuv"
+#else /* !__FreeBSD__ */
+#define PTYCHAR2        "0123456789abcdef"
+#endif /* !__FreeBSD__ */
+#endif  /* !__hpux */
+#endif  /* !PTYCHAR2 */
 
 #ifdef Lynx
 static void
@@ -792,7 +822,11 @@ static int
 get_pty(int *pty, int *tty, char *ttydev, char *ptydev)
 {
 #if defined (SVR4) || defined (USE_PTS)
+#if defined (_AIX)
+	if ((*pty = open ("/dev/ptc", O_RDWR)) < 0)
+#else
 	if ((*pty = open ("/dev/ptmx", O_RDWR)) < 0)
+#endif
 	    return 1;
 	grantpt(*pty);
 	unlockpt(*pty);
@@ -928,7 +962,11 @@ osm_pipe(void)
 
     if (access(OSM_DEVICE, R_OK) < 0)
 	return NULL;
+#if defined (_AIX)
+    if ((tty = open("/dev/ptc", O_RDWR)) < 0)
+#else	    
     if ((tty = open("/dev/ptmx", O_RDWR)) < 0)
+#endif
 	return NULL;
 
     grantpt(tty);

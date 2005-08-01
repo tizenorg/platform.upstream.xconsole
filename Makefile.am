@@ -27,7 +27,7 @@ xconsole_LDADD = $(XCONSOLE_LIBS)
 xconsole_SOURCES =	\
         xconsole.c
 
-dist_man_MANS = \
+dist_man1_MANS = \
         xconsole.man
 
 # App default files  (*.ad)

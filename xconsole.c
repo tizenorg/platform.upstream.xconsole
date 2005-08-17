@@ -646,6 +646,7 @@ main(int argc, char *argv[])
     Arg arglist[10];
     Cardinal num_args;
 
+    XtSetLanguageProc(NULL,NULL,NULL);
     top = XtInitialize ("xconsole", "XConsole", options, XtNumber (options),
 			&argc, argv);
     XtGetApplicationResources (top, (XtPointer)&app_resources, resources,

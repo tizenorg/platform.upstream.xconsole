@@ -940,10 +940,10 @@ get_pty(int *pty, int *tty, char *ttydev, char *ptydev)
  * sends the output to xconsole.
  */
 
-#ifdef SCO
+#ifdef SCO325
 #define	OSM_DEVICE	"/dev/error"
 #else
-#ifdef USL
+#ifdef __UNIXWARE__
 #define OSM_DEVICE	"/dev/osm2"
 #define NO_READAHEAD
 #else

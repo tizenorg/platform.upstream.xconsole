@@ -40,6 +40,14 @@ PKG_CHECK_MODULES(APPDEFS, xt)
 appdefaultdir=$(pkg-config --variable=appdefaultdir xt)
 AC_SUBST(appdefaultdir)
 
+AC_SEARCH_LIBS(openpty, [util])
+AC_CHECK_FUNC(openpty, [HAS_OPENPTY="yes"])
+if test "x$HAS_OPENPTY" = "xyes" ; then
+	AC_DEFINE([HAS_OPENPTY], 1, 
+		[Define to 1 if you have the 'openpty' function.])
+	AC_CHECK_HEADERS([util.h pty.h], [break])
+fi
+
 XORG_MANPAGE_SECTIONS
 XORG_RELEASE_VERSION
 

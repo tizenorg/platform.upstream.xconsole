@@ -36,7 +36,7 @@ appdefaultdir = @appdefaultdir@
 
 
 APPDEFAULTFILES = \
-        XConsole
+        app-defaults/XConsole
 
 SUFFIXES = .ad
 

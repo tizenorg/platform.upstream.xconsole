@@ -66,10 +66,10 @@ extern char *_XawTextGetSTRING(TextWidget ctx, XawTextPosition left,
 #include <ctype.h>
 #include <stdlib.h>
 #ifdef HAS_OPENPTY
-# ifdef HAS_UTIL_H
+# ifdef HAVE_UTIL_H
 #  include <util.h>
 # endif
-# ifdef HAS_PTY_H
+# ifdef HAVE_PTY_H
 #  include <pty.h>
 # endif
 #endif

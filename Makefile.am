@@ -30,33 +30,21 @@ xconsole_SOURCES =	\
 appman_PRE = \
         xconsole.man
 
-# App default files  (*.ad)
+# App default files
+DISTCHECK_CONFIGURE_FLAGS = --with-appdefaultdir=\$${datadir}/X11/app-defaults
 
 appdefaultdir = @appdefaultdir@
 
-
-APPDEFAULTFILES = \
+dist_appdefault_DATA = \
         app-defaults/XConsole
-
-SUFFIXES = .ad
-
-.ad:
-	[ -d app-defaults ] || mkdir app-defaults
-	cp $< $@
-
-appdefault_DATA = $(APPDEFAULTFILES)
-
-EXTRA_DIST = $(APPDEFAULTFILES:%=%.ad)
-
-CLEANFILES = $(APPDEFAULTFILES)
 
 
 appmandir = $(APP_MAN_DIR)
 
 appman_DATA = $(appman_PRE:man=@APP_MAN_SUFFIX@)
 
-EXTRA_DIST += $(appman_PRE)
-CLEANFILES += $(appman_DATA)
+EXTRA_DIST = $(appman_PRE)
+CLEANFILES = $(appman_DATA)
 
 SED = sed
 
@@ -77,7 +65,7 @@ MAN_SUBSTS = \
 	-e 's|__miscmansuffix__|$(MISC_MAN_SUFFIX)|g' \
 	-e 's|__filemansuffix__|$(FILE_MAN_SUFFIX)|g'
 
-SUFFIXES += .$(APP_MAN_SUFFIX) .man
+SUFFIXES = .$(APP_MAN_SUFFIX) .man
 
 .man.$(APP_MAN_SUFFIX):
 	sed $(MAN_SUBSTS) < $< > $@
@@ -85,6 +73,6 @@ SUFFIXES += .$(APP_MAN_SUFFIX) .man
 .PHONY: ChangeLog
 
 ChangeLog:
-	GIT_DIR=${srcdir}/.git git-log --name-only > ChangeLog
+	$(CHANGELOG_CMD)
 
 dist-hook: ChangeLog

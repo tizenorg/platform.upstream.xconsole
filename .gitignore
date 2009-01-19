@@ -19,3 +19,7 @@ stamp-h1
 xconsole
 xconsole.1
 *~
+*.o
+xconsole-*.tar.*
+ChangeLog
+tags

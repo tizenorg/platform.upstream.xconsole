@@ -182,7 +182,9 @@ static XrmOptionDescRec options[] = {
 # endif
 # if defined (SVR4) || defined (USE_PTS)
 #  include <termios.h>
+#  ifndef HAS_OPENPTY
 #  include <sys/stropts.h>		/* for I_PUSH */
+#  endif
 #  ifdef sun
 #   include <sys/strredir.h>
 #  endif
@@ -851,6 +853,7 @@ get_pty(int *pty, int *tty, char *ttydev, char *ptydev)
 	strcpy(ttydev, (char *)ptsname(*pty));
 	if ((*tty = open(ttydev, O_RDWR)) >= 0)
 	{
+#error I_PUSH
 	    (void)ioctl(*tty, I_PUSH, "ttcompat");
 	    return 0;
 	}

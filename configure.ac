@@ -39,9 +39,7 @@ AC_PROG_INSTALL
 
 
 # Checks for pkg-config packages
-PKG_CHECK_MODULES(XCONSOLE, xaw7)
-AC_SUBST(XCONSOLE_CFLAGS)
-AC_SUBST(XCONSOLE_LIBS)
+PKG_CHECK_MODULES(XCONSOLE, xaw7 xmu xt x11)
 
 PKG_CHECK_MODULES(APPDEFS, xt)
 xt_appdefaultdir=`$PKG_CONFIG --variable=appdefaultdir xt`

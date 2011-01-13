@@ -112,6 +112,6 @@ stored in the RESOURCE_MANAGER property.
 .I __apploaddir__/XConsole
 specifies required resources
 .SH "SEE ALSO"
-X(__miscmansuffix__), xrdb(1), Athena Text widget
+X(__miscmansuffix__), xrdb(__appmansuffix__), Athena Text widget
 .SH AUTHOR
 Keith Packard (MIT X Consortium)

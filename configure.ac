@@ -57,4 +57,7 @@ if test "x$HAS_OPENPTY" = "xyes" ; then
 fi
 
 
-AC_OUTPUT([Makefile])
+AC_CONFIG_FILES([
+	Makefile
+	man/Makefile])
+AC_OUTPUT

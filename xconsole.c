@@ -167,7 +167,7 @@ static XrmOptionDescRec options[] = {
  * devpts. This is the fallback if open file FILE_NAME fails.
  * <werner@suse.de>
  */
-#  define USE_PTS 
+#  define USE_PTS
 # endif
 #endif
 
@@ -283,7 +283,7 @@ OpenConsole(void)
 		}
 # endif
 #endif
-		
+
 #ifdef USE_PTY
 		if (!input && get_pty (&pty_fd, &tty_fd, ttydev, ptydev) == 0)
 		{
@@ -538,7 +538,7 @@ inputReady(XtPointer w, int *source, XtInputId *id)
 	    stripNonprint (buffer);
 	    n = strlen (buffer);
 	}
-	
+
 	TextAppend ((Widget) text, buffer, n);
     }
 }
@@ -984,7 +984,7 @@ osm_pipe(void)
 	return NULL;
 #if defined (_AIX)
     if ((tty = open("/dev/ptc", O_RDWR)) < 0)
-#else	    
+#else
     if ((tty = open("/dev/ptmx", O_RDWR)) < 0)
 #endif
 	return NULL;

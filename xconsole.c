@@ -868,25 +868,6 @@ get_pty(int *pty, int *tty, char *ttydev, char *ptydev)
 #else
 	static int devindex, letter = 0;
 
-#ifdef CRAY
-	for (; devindex < 256; devindex++) {
-	    sprintf (ttydev, "/dev/ttyp%03d", devindex);
-	    sprintf (ptydev, "/dev/pty/%03d", devindex);
-
-	    if ((*pty = open (ptydev, O_RDWR)) >= 0 &&
-		(*tty = open (ttydev, O_RDWR)) >= 0)
-	    {
-		/*
-		 * We need to set things up for our next entry
-		 * into this function!
-		 */
-		(void) devindex++;
-		return(0);
-	    }
-	    if (*pty >= 0)
-		close (*pty);
-	}
-#else /* !CRAY */
 #ifdef sgi
 	{
 	    char *slave;
@@ -922,7 +903,6 @@ get_pty(int *pty, int *tty, char *ttydev, char *ptydev)
 	    (void) letter++;
 	}
 #endif /* sgi else not sgi */
-#endif /* CRAY else not CRAY */
 #endif /* USE_GET_PSEUDOTTY */
 #endif /* SVR4 */
 	/*

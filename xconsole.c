@@ -868,23 +868,6 @@ get_pty(int *pty, int *tty, char *ttydev, char *ptydev)
 #else
 	static int devindex, letter = 0;
 
-#if defined(umips) && defined (SYSTYPE_SYSV)
-	struct stat fstat_buf;
-
-	*pty = open ("/dev/ptc", O_RDWR);
-	if (*pty < 0 || (fstat (*pty, &fstat_buf)) < 0)
-	{
-	  return(1);
-	}
-	sprintf (ttydev, "/dev/ttyq%d", minor(fstat_buf.st_rdev));
-	sprintf (ptydev, "/dev/ptyq%d", minor(fstat_buf.st_rdev));
-	if ((*tty = open (ttydev, O_RDWR)) >= 0)
-	{
-	    /* got one! */
-	    return(0);
-	}
-	close (*pty);
-#else /* not (umips && SYSTYPE_SYSV) */
 #ifdef CRAY
 	for (; devindex < 256; devindex++) {
 	    sprintf (ttydev, "/dev/ttyp%03d", devindex);
@@ -940,7 +923,6 @@ get_pty(int *pty, int *tty, char *ttydev, char *ptydev)
 	}
 #endif /* sgi else not sgi */
 #endif /* CRAY else not CRAY */
-#endif /* umips && SYSTYPE_SYSV */
 #endif /* USE_GET_PSEUDOTTY */
 #endif /* SVR4 */
 	/*

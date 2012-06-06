@@ -38,7 +38,7 @@ XORG_DEFAULT_OPTIONS
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for pkg-config packages
-PKG_CHECK_MODULES(XCONSOLE, xaw7 xmu xt >= 1.0 x11)
+PKG_CHECK_MODULES(XCONSOLE, xaw7 xmu xt >= 1.0 x11 xproto >= 7.0.17)
 
 PKG_CHECK_MODULES(APPDEFS, xt)
 xt_appdefaultdir=`$PKG_CONFIG --variable=appdefaultdir xt`

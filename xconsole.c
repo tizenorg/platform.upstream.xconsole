@@ -30,6 +30,8 @@ in this Software without prior written authorization from The Open Group.
 #include "config.h"
 #endif
 
+#include <X11/Xfuncproto.h>
+
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
 #include <X11/Xatom.h>
@@ -382,7 +384,7 @@ KillChild(int sig)
 #endif
 
 /*ARGSUSED*/
-static void
+static void _X_NORETURN
 Quit(Widget widget, XEvent *event, String *params, Cardinal *num_params)
 {
 #ifdef USE_OSM
@@ -634,7 +636,7 @@ ConvertSelection(Widget w, Atom *selection, Atom *target, Atom *type,
     return False;
 }
 
-static void
+static void _X_NORETURN
 LoseSelection(Widget w, Atom *selection)
 {
     Quit (w, (XEvent*)NULL, (String*)NULL, (Cardinal*)NULL);

@@ -90,10 +90,8 @@ indentation indicates hierarchical structure.  The widget class name
 is given first, followed by the widget instance name.
 .sp
 .nf
-.TA .5i
-.ta .5i
 XConsole  xconsole
-	XConsole  text
+     XConsole  text
 .fi
 .sp
 .SH ENVIRONMENT

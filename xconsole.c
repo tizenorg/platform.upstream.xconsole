@@ -334,7 +334,11 @@ OpenConsole(void)
 	    regularFile = FALSE;
 	    if (access(app_resources.file, R_OK) == 0)
 	    {
-		input = fopen (app_resources.file, "r");
+		int fd  = open (app_resources.file,
+				O_RDONLY | O_NONBLOCK | O_NOCTTY);
+		if (fd != -1)
+		    input = fdopen (fd, "r");
+
 		if (input)
 		    if (!stat(app_resources.file, &sbuf) &&
 			S_ISREG( sbuf.st_mode ) )

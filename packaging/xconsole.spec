@@ -12,9 +12,6 @@ BuildRequires:  pkgconfig(xaw7)
 BuildRequires:  pkgconfig(xmu)
 BuildRequires:  pkgconfig(xorg-macros) >= 1.8
 BuildRequires:  pkgconfig(xt)
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-# This was part of the xorg-x11 package up to version 7.6
-Conflicts:      xorg-x11 <= 7.6
 
 %description
 xconsole displays in a X11 window the messages which are usually sent
@@ -32,7 +29,7 @@ make %{?_smp_mflags}
 
 %files
 %defattr(-,root,root)
-%doc ChangeLog COPYING README
+%doc COPYING
 %{_bindir}/xconsole
 %{_sysconfdir}/X11/app-defaults/XConsole
 %{_mandir}/man1/xconsole.1%{?ext_man}

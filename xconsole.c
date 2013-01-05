@@ -150,13 +150,6 @@ static XrmOptionDescRec options[] = {
 #define FILE_NAME "/dev/xcons"
 #endif
 
-#ifdef __UNIXOS2__
-#define USE_FILE
-#define FILE_NAME "/dev/console$"
-#define INCL_DOSFILEMGR
-#define INCL_DOSDEVIOCTL
-#include <os2.h>
-#endif
 
 #ifdef linux
 #define USE_FILE
@@ -215,11 +208,7 @@ static int child_pid;
 #ifdef __hpux
 #define PTYCHAR1        "zyxwvutsrqp"
 #else   /* !__hpux */
-#ifdef __UNIXOS2__
-#define PTYCHAR1        "pq"
-#else
 #define PTYCHAR1        "pqrstuvwxyzPQRSTUVWXYZ"
-#endif  /* !__UNIXOS2__ */
 #endif  /* !__hpux */
 #endif  /* !PTYCHAR1 */
 
@@ -254,7 +243,7 @@ OpenConsole(void)
 	if (!strcmp (app_resources.file, "console"))
 	{
 	    /* must be owner and have read/write permission */
-#if !defined(__NetBSD__) && !defined(__OpenBSD__) && !defined(Lynx) && !defined(__UNIXOS2__)
+#if !defined(__NetBSD__) && !defined(__OpenBSD__) && !defined(Lynx)
 	    struct stat sbuf;
 # if !defined (linux)
 	    if (!stat("/dev/console", &sbuf) &&
@@ -267,21 +256,7 @@ OpenConsole(void)
 # ifdef linux
 		if (!stat(FILE_NAME, &sbuf))
 # endif
-		input = fopen (FILE_NAME, "r");
-# ifdef __UNIXOS2__
-		if (input)
-		{
-		    ULONG arg = 1,arglen;
-		    APIRET rc;
-		    if ((rc=DosDevIOCtl(fileno(input), 0x76,0x4d,
-			&arg, sizeof(arg), &arglen,
-			NULL, 0, NULL)) != 0)
-		    {
-			fclose(input);
-			input = 0;
-		    }
-		}
-# endif
+		    input = fopen (FILE_NAME, "r");
 #endif
 
 #ifdef USE_PTY

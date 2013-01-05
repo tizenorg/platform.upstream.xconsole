@@ -413,7 +413,7 @@ Deiconified(Widget widget, XEvent *event, String *params, Cardinal *num_params)
     Arg	    arglist[1];
     char    *oldName;
     char    *newName;
-    int	    oldlen;
+    size_t  oldlen;
 
     iconified = False;
     if (!app_resources.notify || !notified)

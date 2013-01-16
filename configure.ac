@@ -53,7 +53,7 @@ AC_CHECK_FUNC(openpty, [HAS_OPENPTY="yes"])
 if test "x$HAS_OPENPTY" = "xyes" ; then
 	AC_DEFINE([HAS_OPENPTY], 1,
 		[Define to 1 if you have the 'openpty' function.])
-	AC_CHECK_HEADERS([util.h pty.h], [break])
+	AC_CHECK_HEADERS([util.h libutil.h pty.h], [break])
 fi
 
 

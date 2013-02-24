@@ -148,11 +148,6 @@ static XrmOptionDescRec options[] = {
     {"-saveLines",	"*saveLines",		XrmoptionSepArg,	NULL},
 };
 
-#ifdef ultrix
-#define USE_FILE
-#define FILE_NAME "/dev/xcons"
-#endif
-
 
 #ifdef linux
 #define USE_FILE

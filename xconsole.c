@@ -175,7 +175,7 @@ static XrmOptionDescRec options[] = {
 #   include <sys/strredir.h>
 #  endif
 # endif
-# if defined(TIOCCONS) || defined(SRIOCSREDIR) || defined(Lynx)
+# if defined(TIOCCONS) || defined(SRIOCSREDIR)
 #  define USE_PTY
 static int  tty_fd, pty_fd;
 static char ttydev[64], ptydev[64];
@@ -217,16 +217,6 @@ static int child_pid;
 #endif  /* !__hpux */
 #endif  /* !PTYCHAR2 */
 
-#ifdef Lynx
-static void
-RestoreConsole(void)
-{
-    int fd;
-    if ((fd = open("/dev/con", O_RDONLY)) >= 0)
-	newconsole(fd);
-}
-#endif
-
 static void
 OpenConsole(void)
 {
@@ -236,7 +226,7 @@ OpenConsole(void)
 	if (!strcmp (app_resources.file, "console"))
 	{
 	    /* must be owner and have read/write permission */
-#if !defined(__NetBSD__) && !defined(__OpenBSD__) && !defined(Lynx)
+#if !defined(__NetBSD__) && !defined(__OpenBSD__)
 	    struct stat sbuf;
 # if !defined (linux)
 	    if (!stat("/dev/console", &sbuf) &&
@@ -260,7 +250,6 @@ OpenConsole(void)
 		    if (ioctl (tty_fd, TIOCCONS, (char *) &on) != -1)
 			input = fdopen (pty_fd, "r");
 # else
-#  ifndef Lynx
 		    int consfd = open("/dev/console", O_RDONLY);
 		    if (consfd >= 0)
 		    {
@@ -268,15 +257,6 @@ OpenConsole(void)
 			    input = fdopen (pty_fd, "r");
 			close(consfd);
 		    }
-#  else
-		    if (newconsole(tty_fd) < 0)
-			perror("newconsole");
-		    else
-		    {
-			input = fdopen (pty_fd, "r");
-			atexit(RestoreConsole);
-		    }
-#  endif
 # endif
 		}
 #endif /* USE_PTY */

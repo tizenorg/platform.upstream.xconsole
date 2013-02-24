@@ -77,11 +77,6 @@ extern char *_XawTextGetSTRING(TextWidget ctx, XawTextPosition left,
 # endif
 #endif
 
-/* Fix ISC brain damage.  When using gcc fdopen isn't declared in <stdio.h>. */
-#if defined(ISC) && __STDC__ && !defined(ISC30)
-extern FILE *fdopen(int, char const *);
-#endif
-
 static void inputReady(XtPointer w, int *source, XtInputId *id);
 static long TextLength(Widget w);
 static void TextReplace(Widget w, int start, int end, XawTextBlock *block);
@@ -907,10 +902,6 @@ get_pty(int *pty, int *tty, char *ttydev, char *ptydev)
 #else
 #define	OSM_DEVICE	"/dev/osm"
 #endif
-#endif
-
-#ifdef ISC
-#define NO_READAHEAD
 #endif
 
 static FILE *

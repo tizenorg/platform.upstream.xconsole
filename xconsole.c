@@ -288,8 +288,7 @@ OpenConsole(void)
 		    if (input) {
 			struct stat sbuf;
 
-			if (!stat(app_resources.file, &sbuf) &&
-			    S_ISREG( sbuf.st_mode ) )
+			if ((fstat(fd, &sbuf) == 0) && S_ISREG(sbuf.st_mode))
 			    regularFile = TRUE;
 		    }
 		    else

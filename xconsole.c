@@ -277,20 +277,24 @@ OpenConsole(void)
 	}
 	else
 	{
-	    struct stat sbuf;
-
 	    regularFile = FALSE;
 	    if (access(app_resources.file, R_OK) == 0)
 	    {
 		int fd  = open (app_resources.file,
 				O_RDONLY | O_NONBLOCK | O_NOCTTY);
-		if (fd != -1)
+		if (fd != -1) {
 		    input = fdopen (fd, "r");
 
-		if (input)
-		    if (!stat(app_resources.file, &sbuf) &&
-			S_ISREG( sbuf.st_mode ) )
-			regularFile = TRUE;
+		    if (input) {
+			struct stat sbuf;
+
+			if (!stat(app_resources.file, &sbuf) &&
+			    S_ISREG( sbuf.st_mode ) )
+			    regularFile = TRUE;
+		    }
+		    else
+			close(fd);
+		}
 	    }
 	}
 	if (!input)

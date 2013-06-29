@@ -6,6 +6,7 @@ Summary:        Utility to monitor system console messages with X
 Url:            http://xorg.freedesktop.org/
 Group:          System/X11/Utilities
 Source:         %{name}-%{version}.tar.bz2
+Source1001: 	xconsole.manifest
 BuildRequires:  pkg-config
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xaw7)
@@ -19,6 +20,7 @@ to /dev/console
 
 %prep
 %setup -q
+cp %{SOURCE1001} .
 
 %build
 %configure
@@ -28,6 +30,7 @@ make %{?_smp_mflags}
 %make_install
 
 %files
+%manifest %{name}.manifest
 %defattr(-,root,root)
 %doc COPYING
 %{_bindir}/xconsole

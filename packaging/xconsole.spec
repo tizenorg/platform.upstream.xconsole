@@ -1,3 +1,5 @@
+%bcond_with x
+
 Name:           xconsole
 Version:        1.0.4
 Release:        0
@@ -13,6 +15,10 @@ BuildRequires:  pkgconfig(xaw7)
 BuildRequires:  pkgconfig(xmu)
 BuildRequires:  pkgconfig(xorg-macros) >= 1.8
 BuildRequires:  pkgconfig(xt)
+
+%if !%{with x}
+ExclusiveArch:
+%endif
 
 %description
 xconsole displays in a X11 window the messages which are usually sent

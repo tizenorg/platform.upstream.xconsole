@@ -1,7 +1,7 @@
 %bcond_with x
 
 Name:           xconsole
-Version:        1.0.4
+Version:        1.0.6
 Release:        0
 License:        MIT
 Summary:        Utility to monitor system console messages with X
@@ -29,7 +29,7 @@ to /dev/console
 cp %{SOURCE1001} .
 
 %build
-%configure
+%autogen
 make %{?_smp_mflags}
 
 %install
